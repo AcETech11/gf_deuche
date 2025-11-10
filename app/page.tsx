@@ -1,65 +1,253 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { motion } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper/modules";
+import "swiper/css";
+
+// ==== Slider Images ====
+const leftSlider = [
+  "/images/1.jpg",
+  "/images/2.jpg",
+  "/images/3.jpg",
+  "/images/4.jpg",
+  "/images/5.jpg",
+  "/images/6.jpg",
+  "/images/7.jpg",
+  "/images/8.jpg",
+  "/images/9.jpg",
+];
+
+const rightSlider = [
+  "/images/10.jpg",
+  "/images/11.jpg",
+  "/images/12.jpg",
+  "/images/13.jpg",
+  "/images/14.jpg",
+  "/images/15.jpg",
+  "/images/16.jpg",
+  
+];
+
+export default function GFWelcome() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <section className="relative bg-black text-white h-screen pt-10 md:pt-0 lg:overflow-hidden">
+      {/* === DESKTOP VIEW === */}
+      <div className="hidden lg:grid grid-cols-3 w-full h-full mx-auto items-center gap-10 px-6 relative">
+        {/* Left vertical slider */}
+        <div className="relative h-[600px] overflow-hidden rounded-3xl">
+          <Swiper
+            direction="vertical"
+            loop
+            speed={4000}
+            autoplay={{
+              delay: 0,
+              disableOnInteraction: false,
+              reverseDirection: false,
+            }}
+            slidesPerView={1}
+            spaceBetween={20}
+            modules={[Autoplay]}
+            className="w-full h-full"
+          >
+            {leftSlider.map((src, i) => (
+              <SwiperSlide key={i}>
+                <Image
+                  src={src}
+                  alt={`GF-left-${i}`}
+                  width={400}
+                  height={500}
+                  className="rounded-2xl object-cover w-full h-full opacity-80"
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+
+        {/* Center content */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-center space-y-6"
+        >
+          <motion.h1
+            initial={{ opacity: 0, y: -20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1 }}
+            className="text-5xl font-serif text-yellow-400 leading-tight"
+          >
+            GF Deuche Collection
+          </motion.h1>
+
+          <p className="text-gray-300 max-w-md mx-auto text-lg leading-relaxed">
+            Redefining luxury fashion with timeless elegance, handcrafted detail, and
+            unmatched sophistication.
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+
+          {/* <div className="grid md:grid-cols-2 gap-8 text-left max-w-md mx-auto pt-6">
+            <div>
+              <h3 className="font-semibold text-yellow-400 mb-2">
+                👗 Tailored Elegance
+              </h3>
+              <p className="text-gray-400">
+                Every piece tells a story of precision, class, and grace.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-yellow-400 mb-2">
+                💎 Premium Craftsmanship
+              </h3>
+              <p className="text-gray-400">
+                Designed with detail and made for those who love sophistication.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-yellow-400 mb-2">
+                🌍 For the Modern Woman
+              </h3>
+              <p className="text-gray-400">
+                Bold, confident, and refined — fashion that empowers.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-yellow-400 mb-2">
+                ✨ Exclusive Luxury
+              </h3>
+              <p className="text-gray-400">
+                A symbol of taste, poise, and high-end allure.
+              </p>
+            </div>
+          </div> */}
+
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <Link
+              href="/shop"
+              className="inline-block bg-yellow-400 hover:bg-yellow-500 text-black font-semibold px-10 py-3 rounded-full text-lg transition-all"
+            >
+              Explore Collection
+            </Link>
+          </motion.div>
+        </motion.div>
+
+        {/* Right vertical slider */}
+        <div className="relative h-[600px] overflow-hidden rounded-3xl">
+          <Swiper
+            direction="vertical"
+            loop
+            speed={4000}
+            autoplay={{
+              delay: 0,
+              disableOnInteraction: false,
+              reverseDirection: true,
+            }}
+            slidesPerView={1}
+            spaceBetween={20}
+            modules={[Autoplay]}
+            className="w-full h-full"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            {rightSlider.map((src, i) => (
+              <SwiperSlide key={i}>
+                <Image
+                  src={src}
+                  alt={`GF-right-${i}`}
+                  width={400}
+                  height={500}
+                  className="rounded-2xl object-cover w-full h-full opacity-80"
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
         </div>
-      </main>
-    </div>
+      </div>
+
+      {/* === MOBILE / TABLET VIEW === */}
+            <div className="lg:hidden md:h-screen md:flex md:flex-col md:justify-center space-y-8">
+              {/* Top Swiper - moves left */}
+              <div>
+                <Swiper
+                  loop
+                  speed={4000}
+                  autoplay={{ delay: 0, disableOnInteraction: false }}
+                  slidesPerView={2}
+                  spaceBetween={15}
+                  modules={[Autoplay]}
+                >
+                  {leftSlider.map((src, i) => (
+                    <SwiperSlide key={i}>
+                      <Image
+                        src={src}
+                        alt={`mobile-left-${i}`}
+                        width={300}
+                        height={300}
+                        className="rounded-2xl object-cover w-full h-[200px] md:h-[400px] opacity-80"
+                      />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              </div>
+      
+              {/* Bottom Swiper - moves right */}
+              <div>
+                <Swiper
+                  loop
+                  speed={4000}
+                  autoplay={{
+                    delay: 0,
+                    disableOnInteraction: false,
+                    reverseDirection: true,
+                  }}
+                  slidesPerView={2}
+                  spaceBetween={15}
+                  modules={[Autoplay]}
+                >
+                  {rightSlider.map((src, i) => (
+                    <SwiperSlide key={i}>
+                      <Image
+                        src={src}
+                        alt={`mobile-right-${i}`}
+                        width={300}
+                        height={300}
+                        className="rounded-2xl object-cover w-full h-[200px] md:h-[400px] opacity-80"
+                      />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              </div>
+      
+              {/* Text Section */}
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7 }}
+                className="text-center mt-10"
+              >
+                <h2 className="text-3xl font-serif text-yellow-400 mb-4">
+                  GF Deuche Collection
+                </h2>
+                <p className="text-gray-300 text-base leading-relaxed mb-6">
+                  Where sophistication meets artistry. Step into the world of elegance redefined.
+                </p>
+      
+                <Link
+                  href="/shop"
+                  className="inline-block bg-yellow-400 hover:bg-yellow-500 text-black px-8 py-3 rounded-full text-lg font-medium transition-all"
+                >
+                  Explore Collection
+                </Link>
+              </motion.div>
+            </div> 
+          
+      
+      
+    </section>
   );
 }
+
+
+
