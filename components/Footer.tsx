@@ -22,7 +22,7 @@ export default function Footer() {
             <h2 className="text-xl font-semibold">GF Deuche</h2>
           </div>
           <p className="mt-3 text-sm text-gray-400 leading-relaxed">
-            Luxury & timeless jewelry that adds class to your beauty.
+            Luxury & timeless fashion that adds class to your style.
           </p>
         </div>
 
@@ -33,7 +33,6 @@ export default function Footer() {
             <li><Link href="/shop" className="hover:text-white">Shop</Link></li>
             <li><Link href="/favorites" className="hover:text-white">Favorites</Link></li>
             <li><Link href="/cart" className="hover:text-white">Cart</Link></li>
-            <li><Link href="/contact" className="hover:text-white">Contact</Link></li>
           </ul>
         </div>
 
@@ -41,8 +40,8 @@ export default function Footer() {
         <div>
           <h3 className="text-lg font-medium mb-3">Connect</h3>
           <div className="flex items-center gap-4 text-gray-300">
-            <Link href="https://wa.me/2348106535064" target="_blank" aria-label="WhatsApp">
-              <Image src="/whatsapp.png" alt="WhatsApp" width={20} height={20} />
+            <Link href="https://wa.me/2347088936896" target="_blank" aria-label="WhatsApp">
+              <Image src="/whatsapp.png" alt="WhatsApp" width={50} height={50} />
             </Link>
             <Link href="https://instagram.com" target="_blank" aria-label="Instagram">
               <Instagram className="w-5 h-5 hover:text-white transition" />
@@ -52,9 +51,6 @@ export default function Footer() {
             </Link>
             <Link href="https://twitter.com" target="_blank" aria-label="Twitter">
               <Twitter className="w-5 h-5 hover:text-white transition" />
-            </Link>
-            <Link href="https://youtube.com" target="_blank" aria-label="YouTube">
-              <Youtube className="w-5 h-5 hover:text-white transition" />
             </Link>
           </div>
         </div>

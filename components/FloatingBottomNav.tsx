@@ -72,7 +72,7 @@ export default function BottomNav() {
 
           {/* WhatsApp */}
           <a
-            href="https://wa.me/2348106535064?text=Hello%20I'm%20interested%20in%20ordering"
+            href="https://wa.me/2342347088936896?text=Hello%20I'm%20interested%20in%20ordering"
             target="_blank"
             rel="noopener noreferrer"
             className="flex flex-col items-center gap-1 relative"

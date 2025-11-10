@@ -45,10 +45,15 @@ export default function ShopPage() {
           {categories.map((cat) => (
             <div key={cat._id}>
               <div className="flex items-center justify-between mb-4">
-                <div>
-                  <h3 className="text-xl md:text-2xl font-semibold">{cat.title}</h3>
-                  <p className="text-gray-400 text-sm md:text-base max-w-lg">{cat.description}</p>
+                <div className="space-y-2 md:space-y-3">
+                  <h3 className="text-2xl md:text-3xl font-semibold tracking-tight text-white leading-snug">
+                    {cat.title}
+                  </h3>
+                  <p className="text-gray-300 text-base md:text-lg max-w-xl leading-relaxed font-light">
+                    {cat.description}
+                  </p>
                 </div>
+
                 <a href={`/shop/category/${cat.slug}`} className="text-yellow-400 hidden md:inline">View all →</a>
               </div>
 
@@ -71,8 +76,8 @@ export default function ShopPage() {
                 ))}
 
                 {/* 11th slide = View All */}
-                <SwiperSlide className="px-2">
-                  <div className="h-[500px] bg-accent md:h-72 rounded-2xl flex items-center justify-center border border-secondary/50 cursor-pointer ">
+                <SwiperSlide className="px-2 ">
+                  <div className="h-[500px] lg:hidden bg-accent md:h-72 rounded-2xl flex items-center justify-center border border-secondary/50 cursor-pointer ">
                     <a href={`/shop/category/${cat.slug}`} className="text-yellow-400 font-semibold text-lg animate-pulse">View all →</a>
                   </div>
                 </SwiperSlide>

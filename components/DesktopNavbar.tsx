@@ -43,7 +43,7 @@ export default function DesktopNavbar() {
           className="object-contain"
         />
         <h1 className="text-lg md:text-xl font-serif text-white tracking-wider md:tracking-widest whitespace-nowrap">
-          GF Deuche <span className="md:hidden lg:inline">Collection</span> 
+          GF Deuche <span className="md:hidden lg:inline">Collections</span> 
         </h1>
       </div>
 
@@ -75,7 +75,7 @@ export default function DesktopNavbar() {
         {/* WhatsApp Chat */}
         <li className="relative group">
           <a
-            href="https://wa.me/2348106535064?text=Hello%20I'm%20interested%20in%20ordering"
+            href="https://wa.me/2347088936896?text=Hello%20I'm%20interested%20in%20ordering"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1 hover:text-yellow-400 transition-colors"

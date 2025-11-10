@@ -14,7 +14,6 @@ export default function ProductCard({ product }) {
 
   const imgUrl = product.image ? urlFor(product.image).width(500).height(500).url() : "/placeholder.jpg";
   const slug = product.slug?.current || product.slug || "";
-  console.log(slug);
 
   return (
     <Link href={`/shop/product/${slug}`} className="w-full h-full">
