@@ -37,7 +37,7 @@ export default function ShopPage() {
       <DesktopNavbar />
       <MobileTopNav />
       
-      <main className="min-h-screen bg-[#050505] text-white">
+      <main className="min-h-screen bg-[#050505] text-white overflow-clip">
         {/* 1. HERO / FEATURED SECTION */}
         <section className="pt-24 pb-10">
            <FeaturedSlider items={featured} />
@@ -87,7 +87,7 @@ export default function ShopPage() {
                     1024: { slidesPerView: 3.5 },
                     1440: { slidesPerView: 4.5 },
                   }}
-                  className="!overflow-visible"
+                  className="overflow-visible!"
                 >
                   {cat.products && cat.products.slice(0, 10).map((product) => (
                     <SwiperSlide key={product._id}>
