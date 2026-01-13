@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Montserrat, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
-import { ClerkProvider } from "@clerk/nextjs";
+import ClerkWrapper from "@/components/ClerkWrapper";
 import LiveOrderToasts from "@/components/LiveOrderToasts";
 
 const cormorantGaramond = Cormorant_Garamond({
@@ -17,6 +17,11 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NODE_ENV === "production" 
+    ? "https://gfdeuchecollection.vercel.app" // Update this once you buy your domain
+    : "http://localhost:3000"
+  ),
   title: {
     default: "GF Deuche Collection | Luxury Fashion & Urban Style",
     template: "%s | GF Deuche" // This allows sub-pages to be "Search | GF Deuche"
@@ -57,7 +62,7 @@ export default function RootLayout({
   
 { 
   return (
-     <ClerkProvider>
+     <ClerkWrapper>
       <html lang="en" suppressHydrationWarning>
         <body
           className={`${cormorantGaramond.variable} ${montserrat.variable} antialiased`}
@@ -66,6 +71,6 @@ export default function RootLayout({
           <LiveOrderToasts /> {/* ✅ Moved here as a client component */} 
         </body>
       </html>
-    </ClerkProvider>
+    </ClerkWrapper>
   );
 }
