@@ -221,7 +221,7 @@ export default function ProductPage() {
               {/* Details Accordion (Minimal) */}
               <div className="pt-12 border-t border-white/5 space-y-6">
                 <div>
-                  <h4 className="text-[10px] uppercase tracking-widest text-white/80 mb-2">Designer's Note</h4>
+                  <h4 className="text-[10px] uppercase tracking-widest text-white/80 mb-2">Designer{"'"}s Note</h4>
                   <p className="text-[12px] leading-relaxed text-white/50 font-light">{product.description}</p>
                 </div>
               </div>

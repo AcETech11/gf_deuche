@@ -34,21 +34,19 @@ export default function SearchPage() {
   }, []);
 
   useEffect(() => {
+  const handler = setTimeout(() => {
     if (!query.trim()) {
       setFiltered(products);
       setIsSearching(false);
-      return;
+    } else {
+      // Your existing Fuse search logic here
+      const results = fuse.search(query).map(r => r.item);
+      setFiltered(results);
     }
-    setIsSearching(true);
-    const fuse = new Fuse(products, {
-      keys: ["name", "tags", "category.title", "description"],
-      threshold: 0.4,
-    });
+  }, 100); // 100ms delay prevents "cascading renders"
 
-    const result = fuse.search(query);
-    setFiltered(result.map((r) => r.item));
-  }, [query, products]);
-
+  return () => clearTimeout(handler);
+}, [query, products]);
   return (
     <>
       <DesktopNavbar />
