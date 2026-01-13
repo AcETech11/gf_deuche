@@ -41,7 +41,7 @@ export async function getCategoriesWithProducts() {
 export async function getCategoryProducts(slug: string) {
   const query = `*[_type == "product" && defined(category->slug.current) && category->slug.current == $slug]{
     _id,
-    title,
+    name,
     "slug": slug.current,
     price,
     discountPrice,

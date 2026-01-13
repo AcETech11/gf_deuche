@@ -3,7 +3,9 @@
 import { useEffect, useState } from "react";
 import Fuse from "fuse.js";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
+import { Search as SearchIcon, X, ShoppingBag } from "lucide-react";
 import { urlFor } from "@/sanity/lib/image";
 import { getAllProducts } from "@/lib/sanity.query";
 import { useStore } from "@/store/useStore";
@@ -18,27 +20,29 @@ export default function SearchPage() {
   const [query, setQuery] = useState("");
   const [products, setProducts] = useState([]);
   const [filtered, setFiltered] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const router = useRouter();
 
   const addToCart = useStore((s) => s.addToCart);
 
   useEffect(() => {
     (async () => {
-      const data = await getAllProducts(); // Fetch all products from Sanity
+      const data = await getAllProducts();
       setProducts(data);
       setFiltered(data);
     })();
   }, []);
 
-  // Fuse.js setup
   useEffect(() => {
     if (!query.trim()) {
       setFiltered(products);
+      setIsSearching(false);
       return;
     }
-
+    setIsSearching(true);
     const fuse = new Fuse(products, {
       keys: ["name", "tags", "category.title", "description"],
-      threshold: 0.3, // Lower = stricter
+      threshold: 0.4,
     });
 
     const result = fuse.search(query);
@@ -47,72 +51,106 @@ export default function SearchPage() {
 
   return (
     <>
-    <DesktopNavbar/>
-    <MobileTopNav/>
-    <main className="min-h-screen bg-black text-white px-4 py-12">
-      <div className="max-w-5xl mx-auto">
-        <h1 className="text-3xl md:text-4xl font-semibold mb-6">Search Products</h1>
+      <DesktopNavbar />
+      <MobileTopNav />
+      
+      <main className="min-h-screen bg-[#050505] text-white pt-32 pb-24 px-6">
+        <div className="max-w-7xl mx-auto">
+          
+          {/* Minimalist Search Header */}
+          <header className="mb-20 text-center max-w-2xl mx-auto">
+            <span className="text-[10px] uppercase tracking-[0.5em] text-amber-200/50 mb-4 block">Discovery</span>
+            <div className="relative group">
+              <input
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="SEARCH ARCHIVE..."
+                className="w-full bg-transparent border-b border-white/10 py-4 text-2xl md:text-4xl font-serif italic text-center focus:outline-none focus:border-amber-200/50 transition-colors placeholder:text-white/10"
+              />
+              <div className="absolute left-0 bottom-0 h-[1px] bg-amber-200 w-0 group-focus-within:w-full transition-all duration-700"></div>
+              {query && (
+                <button 
+                  onClick={() => setQuery("")}
+                  className="absolute right-0 top-1/2 -translate-y-1/2 text-white/30 hover:text-white"
+                >
+                  <X size={20} strokeWidth={1} />
+                </button>
+              )}
+            </div>
+          </header>
 
-        {/* Search Input */}
-        <div className="mb-8">
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search by name, tag, or category..."
-            className="w-full px-4 py-3 rounded-full bg-white/10 border border-white/20 focus:outline-none focus:border-yellow-400"
-          />
-        </div>
-
-        {/* Results */}
-        {filtered.length === 0 ? (
-          <p className="text-gray-400 text-center py-10">No products found.</p>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {filtered.map((p) => (
-              <motion.div
-                key={p._id}
-                whileHover={{ scale: 1.03 }}
-                className="relative rounded-2xl overflow-hidden bg-white/10 shadow-md"
-                onClick={() => (window.location.href = `/shop/product/${p.slug.current}`)}
-              >
-                <div className="relative w-full h-64">
-                  <Image
-                    src={p.image ? urlFor(p.image).width(600).height(800).url() : "/placeholder.jpg"}
-                    alt={p.name}
-                    width={600}
-                    height={800}
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-
-                <div className="p-3">
-                  <h4 className="font-medium line-clamp-1">{p.name}</h4>
-                  <p className="text-xs text-gray-400 line-clamp-2">{p.description}</p>
-                  <div className="flex items-center justify-between mt-3">
-                    <div className="text-sm font-semibold text-white">
-                      ₦{p.price?.toLocaleString()}
-                    </div>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        addToCart(p);
-                        toast.success("Added to cart");
-                      }}
-                      className="px-3 py-1 bg-yellow-400 text-black rounded-full text-sm"
+          {/* Results Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16">
+            <AnimatePresence mode="popLayout">
+              {filtered.length > 0 ? (
+                filtered.map((p, idx) => (
+                  <motion.div
+                    key={p._id}
+                    layout
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ delay: idx * 0.05 }}
+                    className="group"
+                  >
+                    <div 
+                      className="relative aspect-[3/4] overflow-hidden bg-[#111] cursor-pointer"
+                      onClick={() => router.push(`/shop/product/${p.slug.current}`)}
                     >
-                      Add
-                    </button>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
+                      <Image
+                        src={p.image ? urlFor(p.image).width(600).height(800).url() : "/placeholder.jpg"}
+                        alt={p.name}
+                        fill
+                        className="object-cover transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
+                      />
+                      
+                      {/* Quick Action Overlay */}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          addToCart(p);
+                          toast.success(`${p.name} added to bag`, {
+                            style: { background: '#111', color: '#fff', border: '1px solid rgba(255,255,255,0.1)', fontSize: '10px', borderRadius: '0px' }
+                          });
+                        }}
+                        className="absolute bottom-0 left-0 w-full bg-white text-black py-4 text-[10px] uppercase tracking-[0.3em] font-bold translate-y-full group-hover:translate-y-0 transition-transform duration-500 flex items-center justify-center gap-2"
+                      >
+                        <ShoppingBag size={14} /> Add to Bag
+                      </button>
+                    </div>
+
+                    <div className="mt-5 space-y-1">
+                      <div className="flex justify-between items-start">
+                        <h3 className="text-[11px] uppercase tracking-[0.2em] text-white/90 font-medium">
+                          {p.name}
+                        </h3>
+                        <span className="text-[13px] font-serif text-amber-100/80">
+                          ₦{p.price?.toLocaleString()}
+                        </span>
+                      </div>
+                      <p className="text-[10px] text-white/30 uppercase tracking-tighter">
+                        {p.category?.title || "Exclusive"}
+                      </p>
+                    </div>
+                  </motion.div>
+                ))
+              ) : (
+                <motion.div 
+                  initial={{ opacity: 0 }} 
+                  animate={{ opacity: 1 }} 
+                  className="col-span-full py-40 text-center"
+                >
+                  <p className="text-[10px] uppercase tracking-[0.4em] text-white/20">No Results Found</p>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
-        )}
-      </div>
-    </main>
-    <FloatingButtonNav/>
-    <Footer/>
+        </div>
+      </main>
+
+      <FloatingButtonNav />
+      <Footer />
     </>
   );
 }

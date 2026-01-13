@@ -27,7 +27,7 @@ export default function DesktopNavbar() {
       initial={{ y: -50, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6 }}
-      className={`hidden sm:flex w-full z-50 items-center justify-between px-6 md:px-10 lg:px-16 py-4 md:py-5 transition-all duration-500
+      className={`hidden lg:flex w-full z-50 items-center justify-between px-6 md:px-10 lg:px-16 py-4 md:py-5 transition-all duration-500
         ${scrolled
           ? "fixed top-0 left-0 bg-black/70 backdrop-blur-xl border-b border-white/10 shadow-lg"
           : "relative bg-transparent"

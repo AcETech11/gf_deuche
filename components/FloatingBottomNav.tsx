@@ -3,24 +3,26 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Heart, ShoppingCart, MessageCircle, Store } from "lucide-react";
+import { Heart, ShoppingBag, MessageCircle, House } from "lucide-react";
 import Link from "next/link";
-import { useStore } from "@/store/useStore"; // your Zustand store
+import { useStore } from "@/store/useStore";
 
 export default function BottomNav() {
   const pathname = usePathname();
   const [visible, setVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
-  // ✅ Zustand global state
   const cart = useStore((state) => state.cart);
   const favorites = useStore((state) => state.favorites);
 
-  // Scroll hide/reveal behavior
   useEffect(() => {
     const controlNavbar = () => {
-      if (window.scrollY > lastScrollY) setVisible(false);
+      // Small threshold to prevent flickering
+      if (Math.abs(window.scrollY - lastScrollY) < 10) return;
+      
+      if (window.scrollY > lastScrollY && window.scrollY > 100) setVisible(false);
       else setVisible(true);
+      
       setLastScrollY(window.scrollY);
     };
     window.addEventListener("scroll", controlNavbar);
@@ -28,62 +30,82 @@ export default function BottomNav() {
   }, [lastScrollY]);
 
   const links = [
-    { href: "/shop", icon: Store, label: "Shop" },
-    { href: "/favorites", icon: Heart, label: "Favorites", count: favorites?.length || 0 },
-    { href: "/cart", icon: ShoppingCart, label: "Cart", count: cart?.length || 0 },
+    { href: "/shop", icon: House, label: "Home" },
+    { href: "/favorites", icon: Heart, label: "Saved", count: favorites?.length || 0 },
+    { href: "/cart", icon: ShoppingBag, label: "Bag", count: cart?.length || 0 },
   ];
 
   return (
     <AnimatePresence>
       {visible && (
-        <motion.nav
-          initial={{ y: 100, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 100, opacity: 0 }}
-          transition={{ duration: 0.3 }}
-          className="fixed bottom-0 left-0 right-0 z-50 md:hidden 
-          bg-black/60 backdrop-blur-md border-t border-white/10
-          text-white flex justify-around items-center py-5 shadow-[0_0_15px_rgba(0,0,0,0.3)]"
+        <motion.div
+          initial={{ y: 100, x: "-50%", opacity: 0 }}
+          animate={{ y: -20, x: "-50%", opacity: 1 }} // Floating effect
+          exit={{ y: 100, x: "-50%", opacity: 0 }}
+          transition={{ type: "spring", stiffness: 260, damping: 20 }}
+          className="fixed bottom-0 left-1/2 z-[100] md:hidden 
+                     w-[92%] max-w-[400px]"
         >
-          {links.map(({ href, icon: Icon, label, count }) => {
-            const isActive = pathname === href;
-            return (
-              <Link key={href} href={href} className="flex flex-col items-center gap-1 relative">
-                {isActive && (
-                  <motion.div
-                    layoutId="bubble"
-                    className="absolute -top-2 w-10 h-10 rounded-full bg-primary backdrop-blur-xl"
-                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                  />
-                )}
-                <div className="relative z-10">
-                  <Icon size={22} />
-                  {/* ✅ Dynamic counter badge */}
-                  {count > 0 && (
-                    <span className="absolute -top-2 -right-2 bg-red-500 text-[10px] font-bold rounded-full px-1.5 py-[1px]">
-                      {count}
-                    </span>
-                  )}
-                </div>
-                <span className="text-[10px] z-10 mt-1 font-semibold">{label}</span>
-              </Link>
-            );
-          })}
+          <nav className="flex justify-around items-center py-3 px-4
+                          bg-black/80 backdrop-blur-2xl 
+                          border border-white/10 rounded-[2rem]
+                          shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+            {links.map(({ href, icon: Icon, label, count }) => {
+              const isActive = pathname === href;
+              return (
+                <Link key={href} href={href} className="relative flex flex-col items-center py-1 group">
+                  <div className="relative p-2 rounded-full transition-colors duration-300">
+                    <Icon 
+                      size={20} 
+                      strokeWidth={isActive ? 2 : 1.5} 
+                      className={isActive ? "text-amber-200" : "text-white/60"} 
+                    />
+                    
+                    {/* Minimalist Gold Badge */}
+                    {count > 0 && (
+                      <span className="absolute top-1 right-1 min-w-[14px] h-[14px] 
+                                     flex items-center justify-center
+                                     bg-amber-200 text-black text-[8px] font-black 
+                                     rounded-full px-1 shadow-sm">
+                        {count}
+                      </span>
+                    )}
+                  </div>
 
-          {/* WhatsApp */}
-          <a
-            href="https://wa.me/2342347088936896?text=Hello%20I'm%20interested%20in%20ordering"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex flex-col items-center gap-1 relative"
-          >
-            <MessageCircle size={22} />
-            <span className="text-[10px] mt-1 font-semibold">Chat</span>
-          </a>
-        </motion.nav>
+                  {/* Active Indicator Line */}
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeIndicator"
+                      className="absolute -bottom-1 w-1 h-1 bg-amber-200 rounded-full"
+                    />
+                  )}
+                  
+                  <span className={`text-[9px] uppercase tracking-[0.1em] mt-0.5 
+                                  ${isActive ? "text-white font-medium" : "text-white/40"}`}>
+                    {label}
+                  </span>
+                </Link>
+              );
+            })}
+
+            {/* WhatsApp - Integrated into style */}
+            <a
+              href="https://wa.me/2347088936896"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex flex-col items-center py-1 group"
+            >
+              <div className="p-2">
+                <MessageCircle size={20} strokeWidth={1.5} className="text-white/60 group-hover:text-white transition-colors" />
+              </div>
+              <span className="text-[9px] uppercase tracking-[0.1em] mt-0.5 text-white/40 group-hover:text-white transition-colors">
+                Chat
+              </span>
+            </a>
+          </nav>
+        </motion.div>
       )}
     </AnimatePresence>
   );
 }
-
 
